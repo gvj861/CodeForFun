@@ -3,6 +3,8 @@ const User = require('../models/users')
 
 const signup = (req,res) => {
 
+try{
+    console.log(req.body)
     const {email} = req.body  // extracting email and password from req.body
     // destructuring of data
     // instead of writing req.body.email , req.body.password
@@ -29,6 +31,13 @@ const signup = (req,res) => {
     )
             }
 })
+
+}
+
+catch (e)
+{
+return res.status(500).json({status : "fail",error : e})
+}
 }
 
 module.exports = {signup : signup}
