@@ -22,7 +22,6 @@ app.use(xss());
 
 app.use(mongoSanitize());
 
-app.use('/api',require('./routes/auth'))  // as app.use() is a middleware
 
 
 // DB connection
@@ -49,6 +48,9 @@ app.use('/',cookieParser())
 
 
 const port = process.env.PORT || 4000  // if env variable present then connect to that port
+
+app.use('/api',require('./routes/auth'))  // as app.use() is a middleware
+
 
 // starting server
 app.listen(port,()=>{
