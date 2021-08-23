@@ -38,6 +38,7 @@ mongoose.connect(process.env.DATABASEURL,{ useNewUrlParser: true,
 
 // middlewares
 
+app.use(express.json({ extended: false }));
 
 //app.use(bodyParser.urlencoded({extended: true}))
 app.use('/',bodyParser.json())
