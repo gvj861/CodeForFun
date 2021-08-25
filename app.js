@@ -65,7 +65,7 @@ app.post('/api/signup', async (req,res) => {
         }
         else
         {
-            return res.status(200).json({status : "success",msg : "Registered Successfully",obj : newObj});
+            return res.status(200).json({status : "success",msg : "Registered Successfully"});
      
         }
     });
