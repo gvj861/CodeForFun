@@ -61,7 +61,7 @@ app.post('/api/signup', async (req,res) => {
     con.collection("users").insertOne( req.body, (err,newObj)=>{
         if (err)
         {
-            res.status(500).json({status : "fail",error : "Server Busy, Please try after sometime","mainError" : err.toString()})
+            res.status(400).json({status : "fail",error : "Already Registered/Invalid Details","mainError" : err.toString()})
         }
         else
         {
