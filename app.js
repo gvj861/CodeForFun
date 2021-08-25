@@ -26,18 +26,25 @@ app.use(mongoSanitize());
 
 // DB connection
 // all sensitive information inside .env file
-mongoose.connect(process.env.DATABASEURL,{ useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
-  }).then(()=>{                     // simple arrow function that executes if connected
-      console.log("Connected to DB")
-  }).catch(()=>{
-      console.log(" DB Connection Error")
-  })
+// mongoose.connect(process.env.DATABASEURL,{ useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useCreateIndex: true
+//   }).then(()=>{                     // simple arrow function that executes if connected
+//       console.log("Connected to DB")
+//   }).catch(()=>{
+//       console.log(" DB Connection Error")
+//   })
 
 // middlewares
 
-app.use(express.json({ extended: false }));
+
+require('./db').dbConnect().then((result) => {
+
+    if (result.length == 2)
+    {
+        var con = result[1];
+        console.log("Connected to db");
+        app.use(express.json({ extended: false }));
 
 //app.use(bodyParser.urlencoded({extended: true}))
 app.use('/',bodyParser.json())
@@ -46,10 +53,55 @@ app.use('/',bodyParser.json())
 
 app.use('/',cookieParser())
 
+//app.use('/api',require('./routes/auth'))  // as app.use() is a middleware
+app.post('/api/signup', async (req,res) => {
+
+    try
+    {
+    var obj = req.body;
+    const newObj = await con.collection("users").updateOne(obj,{upsert : true});
+    if (newObj != null || newObj!=undefined)
+    {
+        return res.status(200).json({status : "success",msg : "Registered Successfully"});
+     
+    }
+
+    else
+    {
+        res.status(500).json({status : "fail",error : "Server Busy, Please try after sometime"})
+    }
+
+    }
+    catch (e)
+    {
+        res.status(500).json({status : "fail",error : "Internal Server Error"})
+    }
+
+})
+
+    }
+    else
+    {
+        console.log("Not Connected")
+    }
+})
+
+
+
+
+// app.use(express.json({ extended: false }));
+
+// //app.use(bodyParser.urlencoded({extended: true}))
+// app.use('/',bodyParser.json())
+// // basically tells the system that you want json to be used.
+// // it is same as urlencoded parser returns the middleware
+
+// app.use('/',cookieParser())
+
 
 const port = process.env.PORT || 4000  // if env variable present then connect to that port
 
-app.use('/api',require('./routes/auth'))  // as app.use() is a middleware
+//app.use('/api',require('./routes/auth'))  // as app.use() is a middleware
 
 
 // starting server
