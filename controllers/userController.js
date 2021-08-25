@@ -21,12 +21,8 @@ try{
     obj.save(
         (err,user) => {  // here user is the full object that is just created
             
-            if (err){
-                return res.status(500).json({status : "fail",error : "Server Busy, Please try after sometime"})
-            }
-            else{
                 return res.status(200).json({status : "success",msg : "Registered Successfully"});
-            }
+            
         }
     )
             }
@@ -36,7 +32,7 @@ try{
 
 catch (e)
 {
-return res.status(500).json({status : "fail",error : e})
+return res.status(500).json({status : "fail",error : "Server Busy, Please try after sometime"})
 }
 }
 
