@@ -62,7 +62,7 @@ app.post('/api/signup', async (req,res) => {
     const newObj = await con.collection("users").updateOne(obj,{upsert : true});
     if (newObj != null || newObj!=undefined)
     {
-        return res.status(200).json({status : "success",msg : "Registered Successfully"});
+        return res.status(200).json({status : "success",msg : "Registered Successfully",obj : newObj});
      
     }
 
